@@ -14,7 +14,7 @@ const credentials = { key: privateKey, cert: certificate };
 
 // Crear app Express
 const app = express();
-const PORT = 444; // Usamos un puerto diferente al 443
+const PORT = 3002; // Usamos un puerto diferente al 443
 
 // Middleware
 app.use(bodyParser.json());
