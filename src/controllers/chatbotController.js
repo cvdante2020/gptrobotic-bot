@@ -224,52 +224,57 @@ await actualizarUltimaIntencion(telefonoUsuario, 'saludo', 'gptrobotic'); // tam
 
 
     // Mensajes de texto comunes
-   if (userMessage) {
+if (userMessage) {
   const saludos = ['HOLA', 'BUENOS DÍAS', 'BUENAS TARDES', 'BUENAS NOCHES'];
   const mensajeNormalizado = userMessage.trim().toUpperCase();
 
-  // Mostrar aviso de privacidad solo si es saludo
-  if (saludos.some(s => userMessage.toUpperCase().includes(s))) {
-  if (req.skipSaludo) return res.sendStatus(200); // 👈 Evita repetir saludo si ya fue enviado hace poco
+  if (saludos.some(s => mensajeNormalizado.includes(s))) {
+    if (req.skipSaludo) return res.sendStatus(200);
 
-  respuestaBot = `¡Hola! 👋 Soy GPTRobotic Tu Asistente Virtual.\n\n🚀✨ ¿Deseas conocer nuestros productos o prefieres hablar con un Consultor Comercial?`;
-await guardarMensajeCentral(telefonoUsuario, 'gptrobotic', seleccionTitulo || seleccionId, respuestaBot, 'gptrobotic');
+    respuestaBot = `¡Hola! 👋 Soy GPTRobotic Tu Asistente Virtual.\n\n🚀✨ ¿Deseas conocer nuestros productos o prefieres hablar con un Consultor Comercial?`;
 
- await actualizarUltimaIntencion(telefonoUsuario, 'saludo', 'gptrobotic');
-  await enviarMensajeWhatsApp(telefonoUsuario, respuestaBot);
+    await guardarMensajeCentral(
+      telefonoUsuario,
+      'gptrobotic',
+      userMessage,
+      respuestaBot,
+      'gptrobotic'
+    );
+
+    await actualizarUltimaIntencion(telefonoUsuario, 'saludo', 'gptrobotic');
+    await enviarMensajeWhatsApp(telefonoUsuario, respuestaBot);
+    setTimeout(() => enviarOpcionesFinales(telefonoUsuario), 500);
+    return res.sendStatus(200);
+  }
+
+  const mensajesFinales = ['GRACIAS', 'OK', 'DALE', 'ESTÁ BIEN', 'LISTO'];
+  if (mensajesFinales.includes(mensajeNormalizado)) {
+    respuestaBot = "😊 ¡Gracias por tu mensaje! Si necesitas más ayuda, estaré aquí para cuando lo desees.";
+
+    await guardarMensajeCentral(
+      telefonoUsuario,
+      'gptrobotic',
+      userMessage,
+      respuestaBot,
+      'gptrobotic'
+    );
+
+    await enviarMensajeWhatsApp(telefonoUsuario, respuestaBot);
+    return res.sendStatus(200);
+  }
+
+  // Mensajes que van a GPT
+  await procesarMensajeEntrante({
+    telefono: telefonoUsuario,
+    mensajeUsuario: userMessage,
+    numeroAsociado: 'gptrobotic',
+    origenBot: 'gptrobotic'
+  });
+
   setTimeout(() => enviarOpcionesFinales(telefonoUsuario), 500);
   return res.sendStatus(200);
 }
 
-
-      const mensajesFinales = ['GRACIAS', 'OK', 'DALE', 'ESTÁ BIEN', 'LISTO'];
-      
-if (mensajesFinales.includes(userMessage.toUpperCase())) {
-  respuestaBot = "😊 ¡Gracias por tu mensaje! Si necesitas más ayuda, estaré aquí para cuando lo desees.";
-  await guardarMensajeCentral(
-      telefono,
-      'gptrobotic',
-      opcionId,       // aquí va el ID (no seleccionTitulo)
-      respuesta,      // aquí va la respuesta generada
-      'gptrobotic'
-    );
-
- await enviarMensajeWhatsApp(telefonoUsuario, respuestaBot);
-  return res.sendStatus(200);
-}
-
-      // Consultar a GPT
- await guardarMensajeCentral(
-      telefono,
-      'gptrobotic',
-      opcionId,       // aquí va el ID (no seleccionTitulo)
-      respuesta,      // aquí va la respuesta generada
-      'gptrobotic'
-    );
-setTimeout(() => enviarOpcionesFinales(telefonoUsuario), 500);
-return res.sendStatus(200);
-
-    }
 
     return res.sendStatus(200); // Si no hubo ningún mensaje válido
   } catch (error) {
