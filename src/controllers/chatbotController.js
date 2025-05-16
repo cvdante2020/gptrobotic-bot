@@ -21,6 +21,20 @@ const validateWebhook = (req, res) => {
   }
   return res.sendStatus(403);
 };
+
+// 👇 Esta función reemplaza directamente la llamada a consultarChatGPT
+const obtenerRespuestaDelBot = async (mensajeUsuario, origenBot) => {
+  try {
+    // Puedes personalizar respuestas por bot si quieres
+    const respuesta = await consultarChatGPT(mensajeUsuario);
+    return respuesta;
+  } catch (error) {
+    console.error('❌ Error en obtenerRespuestaDelBot:', error);
+    return "Lo siento, hubo un problema procesando tu solicitud. Por favor intenta nuevamente.";
+  }
+};
+
+
 const procesarMensajeEntrante = async ({ telefono, mensajeUsuario, numeroAsociado, origenBot }) => {
   try {
     // 1. Verificar si el bot está activo
