@@ -1,6 +1,7 @@
 // src/controllers/chatbotController.js
+
 const axios = require('axios');
-const { guardarInteraccion, registrarUsuarioSiNoExiste, actualizarUltimaIntencion, obtenerUltimaIntencion } = require('../utils/database'); // ✅ CORRECTO
+const { guardarInteraccion, registrarUsuarioSiNoExiste, actualizarUltimaIntencion, obtenerUltimaIntencion,guardarMensajeCentral, verificarEstadoConversacion } = require('../utils/database'); // ✅ CORRECTO
 const { enviarMensajeWhatsApp,enviarMenuAsesoriaUniversitaria, enviarMenuPrincipal, enviarOpcionesFinales, enviarMenuAsesoriaIngles, enviarMenuAsesoriaMatematica, enviarMenuAsesoriaOMatematica,enviarMenuAsesoria5 } = require('../utils/whatsappApi');
 const { consultarChatGPT } = require('../utils/openai');
 const { createClient } = require('@supabase/supabase-js');
@@ -20,7 +21,28 @@ const validateWebhook = (req, res) => {
   }
   return res.sendStatus(403);
 };
+const procesarMensajeEntrante = async ({ telefono, mensajeUsuario, numeroAsociado, origenBot }) => {
+  try {
+    // 1. Verificar si el bot está activo
+    const estado = await verificarEstadoConversacion(telefono, numeroAsociado);
+    if (estado === 'manual') {
+      console.log(`🛑 Bot ${origenBot} desactivado para ${telefono}`);
+      return; // No responde el bot
+    }
 
+    // 2. Generar respuesta (GPT o lógica interna)
+    const respuestaBot = await obtenerRespuestaDelBot(mensajeUsuario, origenBot); // tu lógica IA
+
+    // 3. Enviar la respuesta al usuario (tu función actual de envío)
+    await enviarRespuestaWhatsApp(telefono, respuestaBot);
+
+    // 4. Guardar en Supabase centralizada
+    await guardarMensajeCentral(telefono, numeroAsociado, mensajeUsuario, respuestaBot, origenBot);
+
+  } catch (error) {
+    console.error('❌ Error procesando mensaje:', error);
+  }
+};
 // 🧠 Cache temporal de mensajes ya procesados
 const mensajesProcesados = new Set();
 
@@ -185,14 +207,15 @@ if (mensajesFinales.includes(userMessage.toUpperCase())) {
 }
 
       // Consultar a GPT
-      const respuestaGPT = await consultarChatGPT(userMessage);
-      respuestaBot = respuestaGPT;
-   await guardarInteraccion(telefonoUsuario, userMessage, respuestaBot, 'saludo', 'gptrobotic');
-await actualizarUltimaIntencion(telefonoUsuario, 'saludo', 'gptrobotic'); // también importante
+await procesarMensajeEntrante({
+  telefono: telefonoUsuario,
+  mensajeUsuario: userMessage,
+  numeroAsociado: 'gptrobotic', // puedes cambiar si en el futuro usas número real del bot
+  origenBot: 'gptrobotic'
+});
+setTimeout(() => enviarOpcionesFinales(telefonoUsuario), 500);
+return res.sendStatus(200);
 
-      await enviarMensajeWhatsApp(telefonoUsuario, respuestaBot);
-      setTimeout(() => enviarOpcionesFinales(telefonoUsuario), 500);
-      return res.sendStatus(200);
     }
 
     return res.sendStatus(200); // Si no hubo ningún mensaje válido
