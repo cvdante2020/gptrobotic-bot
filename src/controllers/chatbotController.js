@@ -96,7 +96,13 @@ if (cerrada) return res.sendStatus(200);
 
       if (seleccionId === 'op_1') {
         respuestaBot = `🤖Colocamos un ChatBot para cualquier negocio con un CRM 100% administrable, 100% SAS, en 7 días pon tu negocio a producir .`;
-       await guardarInteraccion(telefonoUsuario, userMessage, respuestaBot, 'saludo', 'gptrobotic');
+      await guardarMensajeCentral(
+    telefonoUsuario,
+    'gptrobotic', // número asociado al bot
+    seleccionTitulo || seleccionId, // lo que el usuario tocó
+    respuestaBot,
+    'gptrobotic'
+  );
 await actualizarUltimaIntencion(telefonoUsuario, 'saludo', 'gptrobotic'); // también importante
 
         await enviarMensajeWhatsApp(telefonoUsuario, respuestaBot);
@@ -111,7 +117,13 @@ await actualizarUltimaIntencion(telefonoUsuario, 'saludo', 'gptrobotic'); // tam
 
       if (seleccionId === 'op_2') {
         respuestaBot = `👽Creamos un asistente de voz personalizado segun tu giro de negocio`;
-       await guardarInteraccion(telefonoUsuario, userMessage, respuestaBot, 'saludo', 'gptrobotic');
+  await guardarMensajeCentral(
+    telefonoUsuario,
+    'gptrobotic', // número asociado al bot
+    seleccionTitulo || seleccionId, // lo que el usuario tocó
+    respuestaBot,
+    'gptrobotic'
+  );
 await actualizarUltimaIntencion(telefonoUsuario, 'saludo', 'gptrobotic'); // también importante
 
         await enviarMensajeWhatsApp(telefonoUsuario, respuestaBot);
@@ -126,7 +138,13 @@ await actualizarUltimaIntencion(telefonoUsuario, 'saludo', 'gptrobotic'); // tam
 
       if (seleccionId === 'op_3') {
         respuestaBot = `🎨 Diseño Web Profesional, Ágil y Enfocado en Conversión`;
-      await guardarInteraccion(telefonoUsuario, userMessage, respuestaBot, 'saludo', 'gptrobotic');
+ await guardarMensajeCentral(
+    telefonoUsuario,
+    'gptrobotic', // número asociado al bot
+    seleccionTitulo || seleccionId, // lo que el usuario tocó
+    respuestaBot,
+    'gptrobotic'
+  );
 await actualizarUltimaIntencion(telefonoUsuario, 'saludo', 'gptrobotic'); // también importante
 
         await enviarMensajeWhatsApp(telefonoUsuario, respuestaBot);
@@ -141,7 +159,13 @@ await actualizarUltimaIntencion(telefonoUsuario, 'saludo', 'gptrobotic'); // tam
 
       if (seleccionId === 'op_4') {
         respuestaBot = `🛍️ Marketing Digital Estratégico y Automatizado para Crecer sin Pausa`;
-      await guardarInteraccion(telefonoUsuario, userMessage, respuestaBot, 'saludo', 'gptrobotic');
+ await guardarMensajeCentral(
+    telefonoUsuario,
+    'gptrobotic', // número asociado al bot
+    seleccionTitulo || seleccionId, // lo que el usuario tocó
+    respuestaBot,
+    'gptrobotic'
+  );
 await actualizarUltimaIntencion(telefonoUsuario, 'saludo', 'gptrobotic'); // también importante
 
         await enviarMensajeWhatsApp(telefonoUsuario, respuestaBot);
@@ -167,7 +191,13 @@ await actualizarUltimaIntencion(telefonoUsuario, 'saludo', 'gptrobotic'); // tam
 
        if (seleccionId === 'op_5') {
         respuestaBot = `🏦 Automatización Inteligente para Entidades Financieras`;
-       await guardarInteraccion(telefonoUsuario, userMessage, respuestaBot, 'saludo', 'gptrobotic');
+ await guardarMensajeCentral(
+    telefonoUsuario,
+    'gptrobotic', // número asociado al bot
+    seleccionTitulo || seleccionId, // lo que el usuario tocó
+    respuestaBot,
+    'gptrobotic'
+  );
 await actualizarUltimaIntencion(telefonoUsuario, 'saludo', 'gptrobotic'); // también importante
 
         await enviarMensajeWhatsApp(telefonoUsuario, respuestaBot);
@@ -203,8 +233,14 @@ await actualizarUltimaIntencion(telefonoUsuario, 'saludo', 'gptrobotic'); // tam
   if (req.skipSaludo) return res.sendStatus(200); // 👈 Evita repetir saludo si ya fue enviado hace poco
 
   respuestaBot = `¡Hola! 👋 Soy GPTRobotic Tu Asistente Virtual.\n\n🚀✨ ¿Deseas conocer nuestros productos o prefieres hablar con un Consultor Comercial?`;
-  await guardarInteraccion(telefonoUsuario, userMessage, respuestaBot, 'saludo', 'gptrobotic');
-  await actualizarUltimaIntencion(telefonoUsuario, 'saludo', 'gptrobotic');
+ await guardarMensajeCentral(
+  telefonoUsuario,
+  'gptrobotic', // número asociado al bot
+  mensajeUsuario,
+  respuestaBot,
+  'gptrobotic' // origen del bot
+);
+ await actualizarUltimaIntencion(telefonoUsuario, 'saludo', 'gptrobotic');
   await enviarMensajeWhatsApp(telefonoUsuario, respuestaBot);
   setTimeout(() => enviarOpcionesFinales(telefonoUsuario), 500);
   return res.sendStatus(200);
@@ -215,18 +251,26 @@ await actualizarUltimaIntencion(telefonoUsuario, 'saludo', 'gptrobotic'); // tam
       
 if (mensajesFinales.includes(userMessage.toUpperCase())) {
   respuestaBot = "😊 ¡Gracias por tu mensaje! Si necesitas más ayuda, estaré aquí para cuando lo desees.";
-  await guardarInteraccion(telefonoUsuario, userMessage, respuestaBot, 'despedida');
-  await enviarMensajeWhatsApp(telefonoUsuario, respuestaBot);
+  await guardarMensajeCentral(
+    telefonoUsuario,
+    'gptrobotic', // número asociado al bot
+    seleccionTitulo || seleccionId, // lo que el usuario tocó
+    respuestaBot,
+    'gptrobotic'
+  );
+
+ await enviarMensajeWhatsApp(telefonoUsuario, respuestaBot);
   return res.sendStatus(200);
 }
 
       // Consultar a GPT
-await procesarMensajeEntrante({
-  telefono: telefonoUsuario,
-  mensajeUsuario: userMessage,
-  numeroAsociado: 'gptrobotic', // puedes cambiar si en el futuro usas número real del bot
-  origenBot: 'gptrobotic'
-});
+ await guardarMensajeCentral(
+    telefonoUsuario,
+    'gptrobotic', // número asociado al bot
+    seleccionTitulo || seleccionId, // lo que el usuario tocó
+    respuestaBot,
+    'gptrobotic'
+  );
 setTimeout(() => enviarOpcionesFinales(telefonoUsuario), 500);
 return res.sendStatus(200);
 
@@ -274,8 +318,14 @@ Cúentanos que deseas realizar y lo elaboramos para ti:
 
   const respuesta = subopciones[opcionId];
   if (respuesta) {
-    await guardarInteraccion(telefono, opcionId, respuesta, 'submenu_asesoria');
-    await enviarMensajeWhatsApp(telefono, respuesta);
+  await guardarMensajeCentral(
+    telefonoUsuario,
+    'gptrobotic', // número asociado al bot
+    seleccionTitulo || seleccionId, // lo que el usuario tocó
+    respuestaBot,
+    'gptrobotic'
+  );
+  await enviarMensajeWhatsApp(telefono, respuesta);
     setTimeout(async () => {
       await enviarOpcionesFinales(telefono);
     }, 500);
@@ -296,8 +346,14 @@ async function manejarSubopcionIngles(telefono, opcionId) {
 
   const respuesta = subopciones[opcionId];
   if (respuesta) {
-    await guardarInteraccion(telefono, opcionId, respuesta, 'submenu_asesoria');
-    await enviarMensajeWhatsApp(telefono, respuesta);
+ await guardarMensajeCentral(
+    telefonoUsuario,
+    'gptrobotic', // número asociado al bot
+    seleccionTitulo || seleccionId, // lo que el usuario tocó
+    respuestaBot,
+    'gptrobotic'
+  );
+   await enviarMensajeWhatsApp(telefono, respuesta);
     setTimeout(async () => {
       await enviarOpcionesFinales(telefono);
     }, 500);
@@ -335,8 +391,14 @@ async function manejarSubopcionMatematica(telefono, opcionId) {
 
   const respuesta = subopciones[opcionId];
   if (respuesta) {
-    await guardarInteraccion(telefono, opcionId, respuesta, 'submenu_asesoria');
-    await enviarMensajeWhatsApp(telefono, respuesta);
+   await guardarMensajeCentral(
+    telefonoUsuario,
+    'gptrobotic', // número asociado al bot
+    seleccionTitulo || seleccionId, // lo que el usuario tocó
+    respuestaBot,
+    'gptrobotic'
+  );
+  await enviarMensajeWhatsApp(telefono, respuesta);
     setTimeout(async () => {
       await enviarOpcionesFinales(telefono);
     }, 500);
@@ -362,8 +424,14 @@ async function manejarSubopcionOMatematica(telefono, opcionId) {
 
   const respuesta = subopciones[opcionId];
   if (respuesta) {
-    await guardarInteraccion(telefono, opcionId, respuesta, 'submenu_asesoria');
-    await enviarMensajeWhatsApp(telefono, respuesta);
+  await guardarMensajeCentral(
+    telefonoUsuario,
+    'gptrobotic', // número asociado al bot
+    seleccionTitulo || seleccionId, // lo que el usuario tocó
+    respuestaBot,
+    'gptrobotic'
+  );
+   await enviarMensajeWhatsApp(telefono, respuesta);
     setTimeout(async () => {
       await enviarOpcionesFinales(telefono);
     }, 500);
@@ -387,8 +455,14 @@ async function manejarSubopcion5(telefono, opcionId) {
 
   const respuesta = subopciones[opcionId];
   if (respuesta) {
-    await guardarInteraccion(telefono, opcionId, respuesta, 'submenu_asesoria');
-    await enviarMensajeWhatsApp(telefono, respuesta);
+  await guardarMensajeCentral(
+    telefonoUsuario,
+    'gptrobotic', // número asociado al bot
+    seleccionTitulo || seleccionId, // lo que el usuario tocó
+    respuestaBot,
+    'gptrobotic'
+  );
+   await enviarMensajeWhatsApp(telefono, respuesta);
     setTimeout(async () => {
       await enviarOpcionesFinales(telefono);
     }, 500);
