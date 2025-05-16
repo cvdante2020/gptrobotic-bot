@@ -1,7 +1,14 @@
 // src/controllers/chatbotController.js
 
 const axios = require('axios');
-const { guardarInteraccion, registrarUsuarioSiNoExiste, actualizarUltimaIntencion, obtenerUltimaIntencion,guardarMensajeCentral, verificarEstadoConversacion } = require('../utils/database'); // ✅ CORRECTO
+const {
+  guardarInteraccion,
+  registrarUsuarioSiNoExiste,
+  actualizarUltimaIntencion,
+  obtenerUltimaIntencion,
+  guardarMensajeCentral, // ✅ asegúrate de incluirlo aquí también
+  verificarEstadoConversacion
+} = require('../utils/database');
 const { enviarMensajeWhatsApp,enviarMenuAsesoriaUniversitaria, enviarMenuPrincipal, enviarOpcionesFinales, enviarMenuAsesoriaIngles, enviarMenuAsesoriaMatematica, enviarMenuAsesoriaOMatematica,enviarMenuAsesoria5 } = require('../utils/whatsappApi');
 const { consultarChatGPT } = require('../utils/openai');
 const { createClient } = require('@supabase/supabase-js');
