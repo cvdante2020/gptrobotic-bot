@@ -233,13 +233,8 @@ await actualizarUltimaIntencion(telefonoUsuario, 'saludo', 'gptrobotic'); // tam
   if (req.skipSaludo) return res.sendStatus(200); // 👈 Evita repetir saludo si ya fue enviado hace poco
 
   respuestaBot = `¡Hola! 👋 Soy GPTRobotic Tu Asistente Virtual.\n\n🚀✨ ¿Deseas conocer nuestros productos o prefieres hablar con un Consultor Comercial?`;
- await guardarMensajeCentral(
-  telefonoUsuario,
-  'gptrobotic', // número asociado al bot
-  mensajeUsuario,
-  respuestaBot,
-  'gptrobotic' // origen del bot
-);
+await guardarMensajeCentral(telefonoUsuario, 'gptrobotic', seleccionTitulo || seleccionId, respuestaBot, 'gptrobotic');
+
  await actualizarUltimaIntencion(telefonoUsuario, 'saludo', 'gptrobotic');
   await enviarMensajeWhatsApp(telefonoUsuario, respuestaBot);
   setTimeout(() => enviarOpcionesFinales(telefonoUsuario), 500);
