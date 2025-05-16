@@ -247,12 +247,12 @@ await guardarMensajeCentral(telefonoUsuario, 'gptrobotic', seleccionTitulo || se
 if (mensajesFinales.includes(userMessage.toUpperCase())) {
   respuestaBot = "😊 ¡Gracias por tu mensaje! Si necesitas más ayuda, estaré aquí para cuando lo desees.";
   await guardarMensajeCentral(
-    telefonoUsuario,
-    'gptrobotic', // número asociado al bot
-    seleccionTitulo || seleccionId, // lo que el usuario tocó
-    respuestaBot,
-    'gptrobotic'
-  );
+      telefono,
+      'gptrobotic',
+      opcionId,       // aquí va el ID (no seleccionTitulo)
+      respuesta,      // aquí va la respuesta generada
+      'gptrobotic'
+    );
 
  await enviarMensajeWhatsApp(telefonoUsuario, respuestaBot);
   return res.sendStatus(200);
@@ -260,12 +260,12 @@ if (mensajesFinales.includes(userMessage.toUpperCase())) {
 
       // Consultar a GPT
  await guardarMensajeCentral(
-    telefonoUsuario,
-    'gptrobotic', // número asociado al bot
-    seleccionTitulo || seleccionId, // lo que el usuario tocó
-    respuestaBot,
-    'gptrobotic'
-  );
+      telefono,
+      'gptrobotic',
+      opcionId,       // aquí va el ID (no seleccionTitulo)
+      respuesta,      // aquí va la respuesta generada
+      'gptrobotic'
+    );
 setTimeout(() => enviarOpcionesFinales(telefonoUsuario), 500);
 return res.sendStatus(200);
 
@@ -313,13 +313,13 @@ Cúentanos que deseas realizar y lo elaboramos para ti:
 
   const respuesta = subopciones[opcionId];
   if (respuesta) {
-  await guardarMensajeCentral(
-    telefonoUsuario,
-    'gptrobotic', // número asociado al bot
-    seleccionTitulo || seleccionId, // lo que el usuario tocó
-    respuestaBot,
-    'gptrobotic'
-  );
+ await guardarMensajeCentral(
+      telefono,
+      'gptrobotic',
+      opcionId,       // aquí va el ID (no seleccionTitulo)
+      respuesta,      // aquí va la respuesta generada
+      'gptrobotic'
+    );
   await enviarMensajeWhatsApp(telefono, respuesta);
     setTimeout(async () => {
       await enviarOpcionesFinales(telefono);
@@ -342,12 +342,12 @@ async function manejarSubopcionIngles(telefono, opcionId) {
   const respuesta = subopciones[opcionId];
   if (respuesta) {
  await guardarMensajeCentral(
-    telefonoUsuario,
-    'gptrobotic', // número asociado al bot
-    seleccionTitulo || seleccionId, // lo que el usuario tocó
-    respuestaBot,
-    'gptrobotic'
-  );
+      telefono,
+      'gptrobotic',
+      opcionId,       // aquí va el ID (no seleccionTitulo)
+      respuesta,      // aquí va la respuesta generada
+      'gptrobotic'
+    );
    await enviarMensajeWhatsApp(telefono, respuesta);
     setTimeout(async () => {
       await enviarOpcionesFinales(telefono);
@@ -387,12 +387,12 @@ async function manejarSubopcionMatematica(telefono, opcionId) {
   const respuesta = subopciones[opcionId];
   if (respuesta) {
    await guardarMensajeCentral(
-    telefonoUsuario,
-    'gptrobotic', // número asociado al bot
-    seleccionTitulo || seleccionId, // lo que el usuario tocó
-    respuestaBot,
-    'gptrobotic'
-  );
+      telefono,
+      'gptrobotic',
+      opcionId,       // aquí va el ID (no seleccionTitulo)
+      respuesta,      // aquí va la respuesta generada
+      'gptrobotic'
+    );
   await enviarMensajeWhatsApp(telefono, respuesta);
     setTimeout(async () => {
       await enviarOpcionesFinales(telefono);
@@ -419,13 +419,13 @@ async function manejarSubopcionOMatematica(telefono, opcionId) {
 
   const respuesta = subopciones[opcionId];
   if (respuesta) {
-  await guardarMensajeCentral(
-    telefonoUsuario,
-    'gptrobotic', // número asociado al bot
-    seleccionTitulo || seleccionId, // lo que el usuario tocó
-    respuestaBot,
-    'gptrobotic'
-  );
+   await guardarMensajeCentral(
+      telefono,
+      'gptrobotic',
+      opcionId,       // aquí va el ID (no seleccionTitulo)
+      respuesta,      // aquí va la respuesta generada
+      'gptrobotic'
+    );
    await enviarMensajeWhatsApp(telefono, respuesta);
     setTimeout(async () => {
       await enviarOpcionesFinales(telefono);
@@ -450,13 +450,13 @@ async function manejarSubopcion5(telefono, opcionId) {
 
   const respuesta = subopciones[opcionId];
   if (respuesta) {
-  await guardarMensajeCentral(
-    telefonoUsuario,
-    'gptrobotic', // número asociado al bot
-    seleccionTitulo || seleccionId, // lo que el usuario tocó
-    respuestaBot,
-    'gptrobotic'
-  );
+   await guardarMensajeCentral(
+      telefono,
+      'gptrobotic',
+      opcionId,       // aquí va el ID (no seleccionTitulo)
+      respuesta,      // aquí va la respuesta generada
+      'gptrobotic'
+    );
    await enviarMensajeWhatsApp(telefono, respuesta);
     setTimeout(async () => {
       await enviarOpcionesFinales(telefono);
