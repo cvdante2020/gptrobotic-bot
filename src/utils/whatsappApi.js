@@ -154,9 +154,9 @@ async function enviarMenuAsesoriaIngles(telefono) {
         button: 'Ver planes',
         sections: [
           {
-            title: 'Niveles disponibles',
+            title: 'Selecciona',
             rows: [
-              { id: 'Asistente de voz', title: '📘 Asistente de voz', description: 'Automatiza llamadas telefónicas' }
+              { id: 'VoiceBot', title: '📘 VoiceBot', description: 'Automatiza llamadas telefónicas' }
             
             ]
           }

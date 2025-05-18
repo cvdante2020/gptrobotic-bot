@@ -9,6 +9,47 @@ if (!supabaseUrl || !supabaseKey) {
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+
+// ✅ Inserta mensaje en tabla unificada
+const guardarMensajeCentral = async (telefono, numeroAsociado, mensajeUsuario, respuestaBot, origenBot) => {
+  const { error } = await supabase
+    .from('mensajes_recibidos')
+    .insert([{
+      telefono,
+      numero_asociado: numeroAsociado ?? 'sin-bot',
+      mensaje_usuario: mensajeUsuario,
+      respuesta_bot: respuestaBot,
+      origen_bot: origenBot
+    }]);
+  if (error) console.error('❌ Error guardando en mensajes_recibidos:', error);
+};
+
+// ✅ Consulta si la conversación está activa o en modo manual
+const verificarEstadoConversacion = async (telefono, numeroAsociado) => {
+  const { data, error } = await supabase
+    .from('conversaciones_activas')
+    .select('estado')
+    .eq('telefono', telefono)
+    .eq('numero_asociado', numeroAsociado ?? 'sin-bot')
+    .single();
+  if (error) return 'activo_bot'; // Si no existe, por defecto el bot responde
+  return data.estado;
+};
+
+// ✅ Cambia estado: 'manual' o 'activo_bot'
+const cambiarEstadoConversacion = async (telefono, numeroAsociado, nuevoEstado = 'activo_bot') => {
+  const { error } = await supabase
+    .from('conversaciones_activas')
+    .upsert({
+      telefono,
+      numero_asociado: numeroAsociado ?? 'sin-bot',
+      estado: nuevoEstado,
+      ultima_interaccion: new Date()
+    }, { onConflict: ['telefono', 'numero_asociado'] });
+
+  if (error) console.error('❌ Error actualizando estado conversación:', error);
+};
+
 const guardarInteraccion = async (telefono, mensajeUsuario, respuestaBot, categoriaConsultada, origenBot) => {
   const { error } = await supabase
     .from('interacciones_chatbot')
@@ -61,5 +102,8 @@ module.exports = {
   guardarInteraccion,
   actualizarUltimaIntencion,
   obtenerUltimaIntencion,
-  registrarUsuarioSiNoExiste
+  registrarUsuarioSiNoExiste,
+   guardarMensajeCentral,
+  verificarEstadoConversacion,
+  cambiarEstadoConversacion
 };

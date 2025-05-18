@@ -138,7 +138,7 @@ await actualizarUltimaIntencion(telefonoUsuario, 'saludo', 'gptrobotic'); // tam
         return res.sendStatus(200);
       }
 
-      if (['Asistente de voz'].includes(seleccionId)) {
+      if (['VoiceBot'].includes(seleccionId)) {
         await manejarSubopcionIngles(telefonoUsuario, seleccionId);
         return res.sendStatus(200);
       }
@@ -342,7 +342,7 @@ Cúentanos que deseas realizar y lo elaboramos para ti:
 
 async function manejarSubopcionIngles(telefono, opcionId) {
   const subopciones = {
-    'Asistente de Voz': `📘 Automatiza llamadas telefónicas con un asistente de voz impulsado por IA. Atiende consultas, 
+    'VoiceBot': `📘 Automatiza llamadas telefónicas con un asistente de voz impulsado por IA. Atiende consultas, 
     verifica identidad, transfiere llamadas o recopila información, sin intervención humana,
     Nuestro VoiceBot es un agente de atención telefónica que conversa en lenguaje natural, responde consultas, 
     guía procesos y se adapta a tu negocio. Utiliza inteligencia artificial, texto a voz realista (TTS) y reconocimiento de voz (ASR):
